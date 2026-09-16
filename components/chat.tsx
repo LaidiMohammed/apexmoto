@@ -20,17 +20,31 @@ export function ChatWidget({ lang }: { lang: Lang }) {
     ? ['MT vs Z difference?', 'Cheapest bike?', 'Do you have TMAX?', 'Where are you?']
     : ['Différence MT / Z ?', 'Moto la moins chère ?', 'Vous avez TMAX ?', 'Adresse & horaires ?'];
 
-  const send = (text: string) => {
+  const send = async (text: string) => {
     const q = text.trim();
-    if (!q) return;
+    if (!q || typing) return;
+    const history: ChatMsg[] = [...msgs, { role: 'user' as const, text: q }].slice(-7);
     setMsgs((m) => [...m, { role: 'user', text: q }]);
     setInput('');
     setTyping(true);
-    setTimeout(() => {
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: q, lang, history, products: loadProducts() }),
+      });
+      if (!res.ok) throw new Error('api-' + res.status);
+      const data = await res.json();
+      if (!data.reply) throw new Error('empty');
+      setMsgs((m) => [...m, { role: 'bot', text: data.reply }]);
+    } catch {
+      // Offline fallback: local knowledge base (works without API key)
       const reply = botReply(q, lang, loadProducts());
-      setMsgs((m) => [...m, { role: 'bot', text: reply }]);
+      const tag = lang === 'ar' ? '\n\n(وضع عدم الاتصال)' : lang === 'en' ? '\n\n(offline mode)' : '\n\n(mode hors-ligne)';
+      setMsgs((m) => [...m, { role: 'bot', text: reply + tag }]);
+    } finally {
       setTyping(false);
-    }, 650);
+    }
   };
 
   return (
