@@ -46,7 +46,12 @@ export function botReply(q: string, lang: Lang, products: Product[]): string {
   }
   // product name match
   const found = products.find((p) => s.includes(p.model.toLowerCase().replace(/\s/g, '')) || s.includes(p.model.toLowerCase()) || s.includes(p.brand.toLowerCase()));
-  if (found) return `**${found.brand} ${found.model} ${found.year}** — ${fmtDZD(found.priceDZD)} — ${found.km} km — ${found.engineCC}cc / ${found.powerCH}ch — ${found.condition}. ${found.desc[lang]}`;
+  if (found) {
+    const mags = found.engineCC
+      ? ` — ${found.engineCC}cc / ${found.powerCH}ch / ${found.torqueNm ?? '?'}Nm / ${found.weightKg ?? '?'}kg / V-max ~${found.topKmh ?? '?'}km/h`
+      : '';
+    return `**${found.brand} ${found.model} ${found.year}** — ${fmtDZD(found.priceDZD)} — ${found.km} km — ${found.condition}${mags}. ${found.desc[lang]}`;
+  }
   return lang === 'ar'
     ? 'فهمتك! اسألني عن: الفرق بين MT وZ، الأسعار، TMAX، العنوان، أو قولي "ميزانية 200 مليون للمدينة".'
     : lang === 'en'

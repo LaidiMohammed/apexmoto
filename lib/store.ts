@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import type { Lead, Product } from './types';
 import { SEED } from './seed';
 
-const DB_KEY = 'apexmoto_db_v1';
+const DB_KEY = 'apexmoto_db_v2';
 const LEADS_KEY = 'apexmoto_leads_v1';
 const LANG_KEY = 'apexmoto_lang';
 

@@ -73,6 +73,10 @@ export default function ProductPage() {
               { icon: Gauge, k: 'Km', v: fmtKm(p.km) },
               { icon: Cog, k: 'Moteur', v: p.engineCC ? `${p.engineCC}cc` : '—' },
               { icon: Zap, k: 'Puissance', v: p.powerCH ? `${p.powerCH} ch` : '—' },
+              { icon: Zap, k: 'Couple', v: p.torqueNm ? `${p.torqueNm} Nm` : '—' },
+              { icon: Gauge, k: 'Poids', v: p.weightKg ? `${p.weightKg} kg` : '—' },
+              { icon: Calendar, k: 'Selle', v: p.seatMm ? `${p.seatMm} mm` : '—' },
+              { icon: Cog, k: 'V-max', v: p.topKmh ? `${p.topKmh} km/h` : '—' },
             ].map((s) => (
               <div key={s.k} className="bg-carbon-900 border border-white/10 p-3">
                 <s.icon className="w-4 h-4 text-apex" />
@@ -106,7 +110,7 @@ export default function ProductPage() {
           {tab === 'desc' && <p>{p.desc[lang]}</p>}
           {tab === 'specs' && (
             <div className="grid sm:grid-cols-2 gap-x-8 gap-y-2">
-              {[['Marque', p.brand], ['Modèle', p.model], ['Année', p.year], ['Kilométrage', fmtKm(p.km)], ['Moteur', p.engineCC + ' cc'], ['Puissance', p.powerCH + ' ch'], ['Transmission', p.transmission], ['État', p.condition], ['Stock', p.stock]].map(([k, v]) => (
+              {[['Marque', p.brand], ['Modèle', p.model], ['Année', p.year], ['Kilométrage', fmtKm(p.km)], ['Moteur', p.engineCC ? p.engineCC + ' cc' : '—'], ['Puissance', p.powerCH ? p.powerCH + ' ch' : '—'], ['Couple', p.torqueNm ? p.torqueNm + ' Nm' : '—'], ['Poids tous pleins', p.weightKg ? p.weightKg + ' kg' : '—'], ['Hauteur de selle', p.seatMm ? p.seatMm + ' mm' : '—'], ['Réservoir', p.fuelL ? p.fuelL + ' L' : '—'], ['Vitesse max', p.topKmh ? '~' + p.topKmh + ' km/h' : '—'], ['Transmission', p.transmission], ['État', p.condition], ['Stock', p.stock]].map(([k, v]) => (
                 <div key={k} className="flex justify-between border-b border-white/8 py-2"><span className="text-zinc-500">{k}</span><b className="text-white">{v}</b></div>
               ))}
             </div>

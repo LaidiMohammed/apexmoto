@@ -15,6 +15,11 @@ export interface Product {
   condition: Condition;
   engineCC: number;
   powerCH: number;
+  torqueNm?: number;
+  weightKg?: number;
+  seatMm?: number;
+  fuelL?: number;
+  topKmh?: number;
   transmission: string;
   colors: string[];
   images: string[];
